@@ -27,7 +27,7 @@ void Element::setWebsite(char* s) {
 Password_Setup::Password_Setup(): style(0), num(0), code(NULL), let(NULL), pw("") {}
 Password_Setup::Password_Setup(string website): style(0), num(0), code(NULL), let(NULL), pw(NULL) {
 
-    // Password-Triplet Erstellung
+    
     char* web = "";
     char* website_Upper = this->toUpperCase(website);
 
@@ -35,12 +35,12 @@ Password_Setup::Password_Setup(string website): style(0), num(0), code(NULL), le
         web = this->appendChar(web, website_Upper[i]);
     }
 
-    // Style-Generierung
-    srand(time(NULL)); // Bei Programmstart jedes Mal eine neue Generierung; random seed
+    
+    srand(time(NULL)); 
 
     this->style = rand() % 3 + 1;
 
-    // Zahl-Generierung
+    
     for (int j = 0; j < 3; j++) {
         int n = rand() % 9 + 1;
 
@@ -53,7 +53,7 @@ Password_Setup::Password_Setup(string website): style(0), num(0), code(NULL), le
         }
     }
 
-    // Code-Generierung
+    
     this->code = "";
 
     for (int k = 0; k < 7; k++) {
@@ -69,7 +69,7 @@ Password_Setup::Password_Setup(string website): style(0), num(0), code(NULL), le
         this->code = this->appendChar(this->code, num);
     }
 
-    // Generierung des Zeichens
+    
     int select = rand() % 2;
 
     if (select == 0) {
@@ -78,7 +78,7 @@ Password_Setup::Password_Setup(string website): style(0), num(0), code(NULL), le
         this->let = '%';
     }
 
-    // Zusammensetzung zum Password
+    
     this->pw = this->attach(web);
 }
 
@@ -129,7 +129,7 @@ char* Password_Setup::toUpperCase(string website) {
 char* Password_Setup::attach(char* web) {
     char* output = "";
 
-    ostringstream ostr; // Konvertierung von int zu string
+    ostringstream ostr; 
     ostr << this->num;
     string num = ostr.str();
 
@@ -191,20 +191,20 @@ char* Password_Setup::attach(char* web) {
 }
 
 bool Password_Setup::identification() {
-    int check = this->pw[0]; //erste Stelle
+    int check = this->pw[0]; 
     int check_n;
 
-    if ((check >= 65 && check <= 90) || (check >= 97 && check <= 122)) { // Buchstaben zuerst -> Style 1,2
+    if ((check >= 65 && check <= 90) || (check >= 97 && check <= 122)) { 
         for (int i = 1; i < 7; i++) {
             check_n = this->pw[i];
 
             if (!(check_n >= 65 && check_n <= 90) && !(check_n >= 97 && check_n <= 122)) {
                 return false;
             }
-        } // alle Buchstaben gefunden, pruefe nun ob Zeichen oder Zahl
+        } 
 
         check_n = this->pw[7];
-        if (check_n == 36 || check_n == 37) { // Zeichen? -> Nach Zahlen schauen
+        if (check_n == 36 || check_n == 37) { 
             for (int i = 8; i < 11; i++) {
                 check_n = this->pw[i];
 
@@ -214,15 +214,15 @@ bool Password_Setup::identification() {
             }
 
             this->style = 1;
-        } else if (check_n >= 48 && check_n <= 57) { // Zahlen? -> Nach Zeichen schauen
+        } else if (check_n >= 48 && check_n <= 57) { 
             for (int i = 8; i < 11; i++) {
                 check_n = this->pw[i];
 
-                if (i < 10) { // zwei weitere Zahlen
+                if (i < 10) { 
                     if (!(check_n >= 48 && check_n <= 57)) {
                         return false;
                     }
-                } else { // Zeichen
+                } else { 
                     if (!(check_n == 36 || check_n == 37)) {
                         return false;
                     }
@@ -233,19 +233,19 @@ bool Password_Setup::identification() {
         } else {
             return false;
         }
-    } else if (check >= 48 && check <= 57) { // Zahlen zuerst -> Style 3
+    } else if (check >= 48 && check <= 57) { 
         for (int i = 1; i < 11; i++) {
             check_n = this->pw[i];
 
-            if (i < 3) { // zwei Zahlen
+            if (i < 3) { 
                 if (!(check_n >= 48 && check_n <= 57)) {
                     return false;
                 }
-            } else if (i == 3) { // Zeichen
+            } else if (i == 3) {
                 if (!(check_n == 36 || check_n == 37)) {
                     return false;
                 }
-            } else { // 7 Buchstaben
+            } else { 
                 if (!(check_n >= 65 && check_n <= 90) && !(check_n >= 97 && check_n <= 122)) {
                     return false;
                 }
@@ -257,7 +257,7 @@ bool Password_Setup::identification() {
         return false;
     }
 
-    return true; // = true, wenn keine Fehler
+    return true; 
 }
 
 char* Password_Setup::encryption(string KEY) {
@@ -344,7 +344,7 @@ char* Password_Setup::encryption(string KEY) {
     }
 
     cout << endl;
-    cout << "Passwort erfolgreich gespeichert und verschluesselt!" << endl;
+    cout << "Password saved and encrypted successfully!" << endl;
     return encrypted;
 }
 
@@ -518,7 +518,7 @@ char Password_Setup::loop_Nums(int i, int key, bool encr_decr) {
 }
 
 void Password_Setup::txtOutput(HANDLE console, int color, bool line, string text) {
-    SetConsoleTextAttribute(console, color); //1 blau //2 green //3 hellblau //4 rot //5 lila //6 gold //7 silber  // 15 white
+    SetConsoleTextAttribute(console, color); 
     if (line) {
         cout << text << endl;
     } else {
@@ -587,7 +587,7 @@ void List::display() {
     cout << endl;
     if (this->anzahl-1 > 0) {
         if (this->anzahl-1 == 1 && this->suche(".W") != -1) {
-            cout << "Fehler; Es existieren keine Passwoerter! Kehre zum Menue zurueck..." << endl;
+            cout << "ERROR; There are no passwords! Return to menu..." << endl;
         } else {
             Password_Setup* methods;
             char* existing_letters = "";
@@ -625,7 +625,7 @@ void List::display() {
             }
         }
     } else {
-        cout << "Fehler; Es existieren keine Passwoerter! Kehre zum Menue zurueck..." << endl;
+        cout << "ERROR; There are no passwords! Return to menu..." << endl;
     }
 }
 
@@ -648,7 +648,7 @@ void List::loeschen(int stelle, string path) {
             fileWrite << this->getIndexPassword(i) << ";" << this->getIndexWebsite(i) << endl;
     }
 
-    cout << "Passwort der Website '" << deleted_website <<"' erfolgreich geloescht!" << endl;
+    cout << "Website password '" << deleted_website <<"' successfully deleted!" << endl;
 }
 
 void List::vertausche(int first, int second) {
